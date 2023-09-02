@@ -11,7 +11,7 @@ sudo python3 setup.py
 
 2. Manual installation:
 
-    - Setup a virtual environment:
+- Setup a virtual environment:
 
 ```bash
 sudo apt install python3.10-venv
@@ -23,7 +23,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-    - Install the dependencies:
+- Install the dependencies:
 
 ```bash
 sudo apt-get install gcc
@@ -41,13 +41,13 @@ export CXX=g++
 sudo apt-get install make
 ```
 
-    - Install the requirements:
+- Install the requirements:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-    - Create a models folder in path:
+- Create a models folder in path:
 
 ```bash
 mkdir models
