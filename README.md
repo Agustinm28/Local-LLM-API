@@ -1,7 +1,7 @@
 # Local-LLM-API
 Repository for Local LLM API Server solution.
 
-## 🔧Setup:
+## 🔧 Setup:
 
 1. Easy path: Run the setup.py file with sudo:
 
@@ -71,7 +71,7 @@ mkdir models
 python3 main.py
 ```
 
-## 🌐Requests
+## 🌐 Requests
 
 - The requests has endpoint: `http://localhost:5000/`
 - See the example in examples folder.
@@ -96,6 +96,6 @@ python3 main.py
 - This is for get the answer of the model in a stream (similar to ChatGPT).
 - Request body: `{"question": "prompt"}`
 
-## 🖊️Author
+## 🖊️ Author
 
 Agustín Montaña - [GitHub](https://github.com/Agustinm28)
