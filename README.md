@@ -10,7 +10,8 @@ sudo python3 setup.py
 ```
 
 2. Manual installation:
-    a. Setup a virtual environment:
+
+- Setup a virtual environment:
 
 ```bash
 sudo apt install python3.10-venv
