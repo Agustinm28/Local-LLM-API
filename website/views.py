@@ -29,15 +29,7 @@ def answer():
     if not prompt:
         return jsonify({"error": "Question not provided in the request"}), 400
 
-    # Response structure compatible with vicuna
-    # stream = llm(
-    #     f"Question: {question} Answer:",
-    #     max_tokens=10000,
-    #     stop=["Q:"],
-    #     echo=True,
-    # )
-    
-    # Response structure compatible with llama-2
+    # Response structure compatible with llama-2 and vicuna
     stream = llm(
         f"Instruction: {prompt}\nResponse:",
         max_tokens=10000,
@@ -69,16 +61,17 @@ def stream():
         return jsonify({"error": error_message}), 500 
     
     request_data = request.get_json()
-    question = request_data.get("question")
+    prompt = request_data.get("prompt")
 
-    if not question:
+    if not prompt:
         return jsonify({"error": "Question not provided in the request"}), 400
 
+    # Response structure compatible with llama-2 and vicuna
     stream = llm(
-        f"Question: {question} Answer:",
+        f"Instruction: {prompt}\nResponse:",
         max_tokens=10000,
-        stop=["Q:"],
-        stream=True,
+        # stop=["\n","Q:"], # Stops the generation when prompt finds a Q: or a \n
+        echo=True,
     )
 
     def event_stream():
