@@ -4,10 +4,9 @@ import json
 
 def load_model():
     '''
-    Method to load the model. Where:
-        - model_path: path to the model
+    Method to load the model. Gets the model name from config.json.
     '''
-    # Load the model
+    
     print('Loading model...')
 
     # Read model name from config.json
@@ -24,8 +23,7 @@ def load_model():
 
 def get_models():
     '''
-    Method to get the models. Where:
-        - model_path: path to the model
+    Method to get the models available in the models folder.
     '''
     # Check if models folder exists
     if not os.path.isdir('./models'):
