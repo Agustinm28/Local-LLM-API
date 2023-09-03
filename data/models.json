@@ -1,0 +1,8 @@
+{
+    "Vicuna-7B": {
+        "vicuna-7b-v1.5.ggmlv3.q2_K.bin":"https://huggingface.co/TheBloke/vicuna-7B-v1.5-GGML/resolve/main/vicuna-7b-v1.5.ggmlv3.q2_K.bin"
+    },
+    "Llama-2-7B": {
+        "llama-2-7b-v1.5.ggmlv3.q2_K.bin":"https://huggingface.co/TheBloke/Llama-2-7B-GGML/resolve/main/llama-2-7b.ggmlv3.q2_K.bin"
+    }
+}

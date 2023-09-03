@@ -1,6 +1,8 @@
 from llama_cpp import Llama
 import os
 import json
+import requests
+from tqdm import tqdm
 
 def load_model():
     '''
@@ -64,3 +66,63 @@ def set_model(model_name:str):
     except Exception as e:
         print(e)
         return False
+
+def see_models():
+    '''
+    Method to see the models available for download in the models.json file
+    '''
+    # Read models.json
+    with open('data/models.json', 'r') as f:
+        models = json.load(f)
+
+    models_dict = {}
+    # Make a dict with the model
+    for model_name, sub_dict in models.items():
+        # Create key list with sub_dict keys
+        keys = list(sub_dict.keys())
+
+        # Add the pair key-value to the dict
+        models_dict[model_name] = keys
+
+    return models_dict
+
+def download_model(model_name:str):
+    '''
+    Method to download the model. Where:
+        - model_name: name of the model. You can get the models with see_models()
+    '''
+
+    with open('data/models.json', 'r') as f:
+        models = json.load(f)
+
+    # Check if model exists
+    for model in models:
+        if model_name in models[model]:
+            model_url = models[model][model_name]
+        else:
+            pass
+    
+    download_path = f'models/{model_name}'
+
+    # Download the model
+    print(f'Downloading model {model_name}...')
+    response = requests.get(model_url, stream=True)
+
+    if response.status_code == 200:
+        total_size = int(response.headers.get('content-length', 0))
+        chunk_size = 1024
+
+        with open(download_path, 'wb') as f, tqdm(
+            desc=download_path,
+            total=total_size,
+            unit='iB',
+            unit_scale=True,
+            unit_divisor=1024,
+        ) as bar:
+            for data in response.iter_content(chunk_size=chunk_size):
+                f.write(data)
+                bar.update(len(data))
+        return f"Model {model_name} downloaded"
+    else:
+        return f"Model {model_name} download failed"
+    

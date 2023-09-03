@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request, Response
-from website.load_model import load_model, get_models, set_model
+from website.load_model import load_model, get_models, set_model, see_models, download_model
 from website.authentication import *
 import copy
 import asyncio
@@ -16,33 +16,35 @@ def home():
 @views.route('/model', methods=['POST'])
 @require_api_key
 def answer():
-    '''
-    Method to get the answer from the model.
-        - Requires a json with the question in the request.
-        - Requires an API key in the request header.
-    '''
-    start_time = time.time() # Check answer time
-    ## Load model
+    start_time = time.time()
     try:
         llm = load_model()
     except Exception as e:
         error_message = str(e)
         return jsonify({"error": error_message}), 500 
     
-    ## Get question from request
     request_data = request.get_json()
-    question = request_data.get("question")
+    prompt = request_data.get("prompt")
 
-    if not question:
+    if not prompt:
         return jsonify({"error": "Question not provided in the request"}), 400
 
-    ## Get answer from model, and copy it to avoid memory leaks
+    # Response structure compatible with vicuna
+    # stream = llm(
+    #     f"Question: {question} Answer:",
+    #     max_tokens=10000,
+    #     stop=["Q:"],
+    #     echo=True,
+    # )
+    
+    # Response structure compatible with llama-2
     stream = llm(
-        f"Question: {question} Answer:",
+        f"Instruction: {prompt}\nResponse:",
         max_tokens=10000,
-        stop=["Q:"],
+        # stop=["\n","Q:"], # Stops the generation when prompt finds a Q: or a \n
         echo=True,
     )
+    
     result = copy.deepcopy(stream)
 
     end_time = time.time()
@@ -103,15 +105,57 @@ def models():
         models = get_models()
     except Exception as e:
         error_message = str(e)
-        return jsonify({"error": error_message}), 500 
-    
-    print(models)
+        return jsonify({"error": error_message}), 500
 
     end_time = time.time()
     execution_time = end_time - start_time
     print(f"Execution time in seconds: {execution_time}")
     
     return jsonify({"models": models})
+
+@views.route('/downloadModels', methods=['POST', 'GET'])
+@require_api_key
+def download_models():
+    '''
+    Method to get the models available for download in the models.json file.
+        - Requires an API key in the request header.
+    '''
+    start_time = time.time()
+    try:
+        models = see_models()
+    except Exception as e:
+        error_message = str(e)
+        return jsonify({"error": error_message}), 500
+
+    end_time = time.time()
+    execution_time = end_time - start_time
+    print(f"Execution time in seconds: {execution_time}")
+    
+    return jsonify({"models": models})
+
+@views.route('/downloadModel', methods=['POST', 'GET'])
+@require_api_key
+def obtain_model():
+    '''
+    Method to download a model locally.
+        - Requires an API key in the request header.
+    '''
+    start_time = time.time()
+
+    request_data = request.get_json()
+    model_name = request_data.get("model")
+
+    try:
+        model = download_model(model_name)
+    except Exception as e:
+        error_message = str(e)
+        return jsonify({"error": error_message}), 500
+
+    end_time = time.time()
+    execution_time = end_time - start_time
+    print(f"Execution time in seconds: {execution_time}")
+    
+    return jsonify({"model": model})
 
 @views.route('/setModel', methods=['POST', 'GET'])
 @require_api_key
