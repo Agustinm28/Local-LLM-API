@@ -146,17 +146,26 @@ def obtain_model():
 
     try:
         model = download_model(model_name)
-        for bar in model:
-            print(bar)
     except Exception as e:
         error_message = str(e)
         return jsonify({"error": error_message}), 500
+
+    def download_stream():
+        for bar in model:
+            if isinstance(bar, str):
+                yield bar.encode('utf-8')
+            elif isinstance(bar, bytes):
+                yield bar
+            else:
+                #print(f"Skipping unsupported data: {bar}")
+                continue
 
     end_time = time.time()
     execution_time = end_time - start_time
     print(f"Execution time in seconds: {execution_time}")
 
-    return jsonify({"model": model})
+    return Response(download_stream(), mimetype="text/download-stream")
+
 
 
 @views.route('/setModel', methods=['POST', 'GET'])

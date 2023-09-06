@@ -76,4 +76,7 @@ if ! [ -d "models" ]; then
     mkdir models
 fi
 
+## Give permission to execute the script
+sudo chmod -R a+rwx .venv
+
 return 0
