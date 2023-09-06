@@ -71,7 +71,7 @@ def stream():
         f"Instruction: {prompt}\nResponse:",
         max_tokens=10000,
         # stop=["\n","Q:"], # Stops the generation when prompt finds a Q: or a \n
-        echo=True,
+        stream=True,
     )
 
     def event_stream():
@@ -173,30 +173,6 @@ def req_models():
     print(f"Execution time in seconds: {execution_time}")
     
     return jsonify({"model_status": model_request})
-
-@views.route('/auth', methods=['POST', 'GET'])
-@require_api_key
-def auth():
-    '''
-    Method to check if the API key is valid.
-        - Requires an API key in the request header.
-    '''
-    return jsonify({"auth": True})
-
-@views.route('/getKey', methods=['POST', 'GET'])
-@require_master_key
-def key():
-    '''
-    Method to generate a new API key.
-        - Requires a master API key in the request header. The master API key is the first API key generated, with key 0.
-    '''
-    try:
-        key_request = generate_api_key()
-    except Exception as e:
-        error_message = str(e)
-        return jsonify({"error": error_message}), 500 
-
-    return jsonify({"key_status": key_request})
 
 @views.route('/auth', methods=['POST', 'GET'])
 @require_api_key
