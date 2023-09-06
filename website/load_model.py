@@ -122,6 +122,7 @@ def download_model(model_name:str):
             for data in response.iter_content(chunk_size=chunk_size):
                 f.write(data)
                 bar.update(len(data))
+                yield bar
         return f"Model {model_name} downloaded"
     else:
         return f"Model {model_name} download failed"

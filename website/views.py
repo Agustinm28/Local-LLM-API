@@ -8,10 +8,12 @@ import time
 
 views = Blueprint('views', __name__)
 
+
 @views.route('/')
 @require_api_key
 def home():
     return "<h1>Local LLM improved API</h1><p>Use /model to get answer, /stream to stream answer, /models to see available models, /setModel to set a model</p>"
+
 
 @views.route('/model', methods=['POST'])
 @require_api_key
@@ -21,8 +23,8 @@ def answer():
         llm = load_model()
     except Exception as e:
         error_message = str(e)
-        return jsonify({"error": error_message}), 500 
-    
+        return jsonify({"error": error_message}), 500
+
     request_data = request.get_json()
     prompt = request_data.get("prompt")
 
@@ -36,14 +38,15 @@ def answer():
         # stop=["\n","Q:"], # Stops the generation when prompt finds a Q: or a \n
         echo=True,
     )
-    
+
     result = copy.deepcopy(stream)
 
     end_time = time.time()
     execution_time = end_time - start_time
     print(f"Execution time in seconds: {execution_time}")
-    
+
     return jsonify({"result": result})
+
 
 @views.route("/stream", methods=['POST'])
 @require_api_key
@@ -58,8 +61,8 @@ def stream():
         llm = load_model()
     except Exception as e:
         error_message = str(e)
-        return jsonify({"error": error_message}), 500 
-    
+        return jsonify({"error": error_message}), 500
+
     request_data = request.get_json()
     prompt = request_data.get("prompt")
 
@@ -86,6 +89,7 @@ def stream():
 
     return Response(event_stream(), mimetype="text/event-stream")
 
+
 @views.route('/models', methods=['POST', 'GET'])
 @require_api_key
 def models():
@@ -103,8 +107,9 @@ def models():
     end_time = time.time()
     execution_time = end_time - start_time
     print(f"Execution time in seconds: {execution_time}")
-    
+
     return jsonify({"models": models})
+
 
 @views.route('/downloadModels', methods=['POST', 'GET'])
 @require_api_key
@@ -123,8 +128,9 @@ def download_models():
     end_time = time.time()
     execution_time = end_time - start_time
     print(f"Execution time in seconds: {execution_time}")
-    
+
     return jsonify({"models": models})
+
 
 @views.route('/downloadModel', methods=['POST', 'GET'])
 @require_api_key
@@ -140,6 +146,8 @@ def obtain_model():
 
     try:
         model = download_model(model_name)
+        for bar in model:
+            print(bar)
     except Exception as e:
         error_message = str(e)
         return jsonify({"error": error_message}), 500
@@ -147,8 +155,9 @@ def obtain_model():
     end_time = time.time()
     execution_time = end_time - start_time
     print(f"Execution time in seconds: {execution_time}")
-    
+
     return jsonify({"model": model})
+
 
 @views.route('/setModel', methods=['POST', 'GET'])
 @require_api_key
@@ -161,18 +170,19 @@ def req_models():
     start_time = time.time()
     request_data = request.get_json()
     model = request_data.get("model")
-    
+
     try:
         model_request = set_model(model)
     except Exception as e:
         error_message = str(e)
-        return jsonify({"error": error_message}), 500 
+        return jsonify({"error": error_message}), 500
 
     end_time = time.time()
     execution_time = end_time - start_time
     print(f"Execution time in seconds: {execution_time}")
-    
+
     return jsonify({"model_status": model_request})
+
 
 @views.route('/auth', methods=['POST', 'GET'])
 @require_api_key
@@ -182,6 +192,7 @@ def auth():
         - Requires an API key in the request header.
     '''
     return jsonify({"auth": True})
+
 
 @views.route('/getKey', methods=['POST', 'GET'])
 @require_master_key
@@ -194,6 +205,6 @@ def key():
         key_request = generate_api_key()
     except Exception as e:
         error_message = str(e)
-        return jsonify({"error": error_message}), 500 
+        return jsonify({"error": error_message}), 500
 
     return jsonify({"key_status": key_request})
