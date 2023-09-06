@@ -1,11 +1,14 @@
 #!/bin/bash
 
-### Script to setup the project. Execute with sudo.
+### Script to setup the project. 
+
+## Give permission to execute the script
+chmod +x setup.sh
 
 ## Check if the script is being run as root
 if [ "$EUID" -ne 0 ]
   then echo "This script must be run with sudo."
-  exit 1
+  return 1
 fi
 
 ## Install update
@@ -18,13 +21,13 @@ echo "Setting up enviroment..."
 # Check if pip is installed
 if ! [ -x "$(command -v pip3)" ]; then
     echo "Installing pip..."
-    sudo apt install python3-pip
+    sudo apt install python3-pip -y
 fi
 # Install venv
 # Check if venv is installed
 if ! [ -x "$(command -v python3.10-venv)" ]; then
     echo "Installing venv..."
-    sudo apt install python3.10-venv
+    sudo apt install python3.10-venv -y
 fi
 # Create venv
 # Check if venv is created
@@ -43,7 +46,7 @@ echo "Installing packages..."
 # Check if gcc is installed
 if ! [ -x "$(command -v gcc)" ]; then
     echo "Installing gcc..."
-    sudo apt-get install gcc
+    sudo apt-get install gcc -y
     export CC=gcc
 fi
 
@@ -51,7 +54,7 @@ fi
 # Check if g++ is installed
 if ! [ -x "$(command -v g++)" ]; then
     echo "Installing g++..."
-    sudo apt-get install g++
+    sudo apt-get install g++ -y
     export CXX=g++
 fi
 
@@ -59,7 +62,7 @@ fi
 # Check if make is installed
 if ! [ -x "$(command -v make)" ]; then
     echo "Installing make..."
-    sudo apt-get install make
+    sudo apt-get install make -y
 fi
 
 ## Install dependencies
@@ -72,3 +75,5 @@ if ! [ -d "models" ]; then
     echo "Creating models folder..."
     mkdir models
 fi
+
+return 0
