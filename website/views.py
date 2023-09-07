@@ -151,20 +151,14 @@ def obtain_model():
         return jsonify({"error": error_message}), 500
 
     def download_stream():
-        for bar in model:
-            if isinstance(bar, str):
-                yield bar.encode('utf-8')
-            elif isinstance(bar, bytes):
-                yield bar
-            else:
-                #print(f"Skipping unsupported data: {bar}")
-                continue
+        for data in model:
+            yield data
 
     end_time = time.time()
     execution_time = end_time - start_time
     print(f"Execution time in seconds: {execution_time}")
 
-    return Response(download_stream(), mimetype="text/download-stream")
+    return Response(download_stream(), mimetype="text/plain")
 
 
 
