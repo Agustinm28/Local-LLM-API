@@ -129,3 +129,29 @@ def download_model(model_name:str):
     else:
         return f"Model {model_name} download failed"
     
+def get_size(model_name:str):
+    '''
+    Method to get the size of the model. Where:
+        - model_name: name of the model. You can get the models with see_models()
+    '''
+
+    with open('data/models.json', 'r') as f:
+        models = json.load(f)
+
+    # Check if model exists
+    for model in models:
+        if model_name in models[model]:
+            model_url = models[model][model_name]
+        else:
+            pass
+    
+    # Get the size of the model
+    print(f'Getting size of model {model_name}...')
+    response = requests.get(model_url, stream=True)
+
+    if response.status_code == 200:
+        total_size = int(response.headers.get('content-length', 0))
+        return total_size
+    else:
+        return f"Model {model_name} download failed"
+    

@@ -1,9 +1,10 @@
 from flask import Blueprint, jsonify, request, Response
-from website.load_model import load_model, get_models, set_model, see_models, download_model
+from website.load_model import load_model, get_models, set_model, see_models, download_model, get_size
 from website.authentication import *
 import copy
 import asyncio
 from flask_sse import sse
+from flask_socketio import SocketIO, emit
 import time
 
 views = Blueprint('views', __name__)
@@ -131,7 +132,6 @@ def download_models():
 
     return jsonify({"models": models})
 
-
 @views.route('/downloadModel', methods=['POST', 'GET'])
 @require_api_key
 def obtain_model():
@@ -140,6 +140,7 @@ def obtain_model():
         - Requires an API key in the request header.
     '''
     start_time = time.time()
+    #global headers
 
     request_data = request.get_json()
     model_name = request_data.get("model")
@@ -160,7 +161,29 @@ def obtain_model():
 
     return Response(download_stream(), mimetype="text/plain")
 
+@views.route('/getModelSize', methods=['GET'])
+@require_api_key
+def obtain_model_size():
+    '''
+    Method to download a model locally.
+        - Requires an API key in the request header.
+    '''
+    start_time = time.time()
 
+    request_data = request.get_json()
+    model_name = request_data.get("model")
+
+    try:
+        size = get_size(model_name)
+    except Exception as e:
+        error_message = str(e)
+        return jsonify({"error": error_message}), 500
+
+    end_time = time.time()
+    execution_time = end_time - start_time
+    print(f"Execution time in seconds: {execution_time}")
+
+    return jsonify({"size": size})
 
 @views.route('/setModel', methods=['POST', 'GET'])
 @require_api_key
