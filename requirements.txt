@@ -1,7 +1,11 @@
 flask
 flask_sse
+llama-cpp-python
 asyncio
 asgiref
 requests
 tqdm
-langchain
+flask
+python-dotenv
+flask-restful
+flask_restx
