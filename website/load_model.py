@@ -1,4 +1,3 @@
-from llama_cpp import Llama
 import os
 import json
 import requests

@@ -1,7 +1,7 @@
 flask
 flask_sse
-llama-cpp-python==0.1.65
 asyncio
 asgiref
 requests
 tqdm
+langchain

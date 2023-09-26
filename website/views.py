@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request, Response
 from website.load_model import load_model, get_models, set_model, see_models, download_model, get_size
 from website.authentication import *
+from website.generator import generate_text
 import copy
 import asyncio
 from flask_sse import sse
@@ -8,7 +9,6 @@ from flask_socketio import SocketIO, emit
 import time
 
 views = Blueprint('views', __name__)
-
 
 @views.route('/')
 @require_api_key
@@ -48,6 +48,27 @@ def answer():
 
     return jsonify({"result": result})
 
+@views.route('/gptq', methods=['POST'])
+@require_api_key
+def gptq_answer():
+
+    request_data = request.get_json()
+    prompt = request_data.get("prompt")
+
+    if not prompt:
+        return jsonify({"error": "Prompt not provided in the request"}), 400
+
+    # Response structure compatible with llama-2 and vicuna
+    start_time = time.time()
+    stream = generate_text(prompt)
+
+    result = copy.deepcopy(stream)
+
+    end_time = time.time()
+    execution_time = end_time - start_time
+    print(f"Execution time in seconds: {execution_time}")
+
+    return jsonify({"result": result})
 
 @views.route("/stream", methods=['POST'])
 @require_api_key
