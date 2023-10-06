@@ -209,12 +209,13 @@ def generate_gpu_text(prompt: str, previous_dialogue: str = None, temperature: f
         config = json.load(f)
     model_name = config['model']
 
-    # Load model and tokenizer
-    model, tokenizer = load_gen_model('./models', model_name)  
-
     # If model doesnt end with GPTQ, return error
     if not model_name.endswith('GPTQ'):
         raise Exception('Model is not GPTQ')
+    
+    # Load model and tokenizer
+    model, tokenizer = load_gen_model('./models', model_name)  
+
 
     if not previous_dialogue:
         previous_dialogue = "Esta es la primera escena a generar. Aún no hay contexto."
