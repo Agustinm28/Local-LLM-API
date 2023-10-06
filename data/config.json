@@ -7,6 +7,6 @@
     "top_k":40,
     "verbose":true,
     "repeat_penalty":1.1,
-    "template":"Eres un guionista y redactor de dialogos profesional. PROMPT: {prompt} GUIONISTA:"
+    "template":"Eres un guionista y redactor de dialogos profesional. CONTEXT: {entities} PROMPT: {prompt} GUIONISTA:"
     }
 }

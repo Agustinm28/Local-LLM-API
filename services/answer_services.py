@@ -2,12 +2,17 @@ from flask_restx import Namespace, Resource
 from flask import request
 from utils.load_model import load_model
 from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain
+from langchain.chains import ConversationChain
+from langchain.memory import ConversationEntityMemory
+from langchain.memory.entity import SQLiteEntityStore
 import time
 import copy
 from auth.authentication import *
 
 answer = Namespace('answer', description='Answer related operations')
+entity_store = SQLiteEntityStore()
+
+memory = None
 llm = None
 template = None
 
@@ -16,12 +21,15 @@ class Answer(Resource):
     @require_api_key
     def post(self):
         start_time = time.time()
+        
         global llm
         global template
+        global memory
 
         if not llm:
             try:
                 llm, template = load_model('Vicuna-13b')
+                memory = ConversationEntityMemory(llm=llm, entity_store=entity_store)
             except Exception as e:
                 error_message = str(e)
                 return answer.abort(500, error_message)
@@ -34,8 +42,8 @@ class Answer(Resource):
 
         # Create prompt from template
         ## input_variables reads the variables from the template
-        prompt = PromptTemplate(template=template, input_variables=["prompt"])
-        llm_chain = LLMChain(prompt=prompt, llm=llm)
+        prompt = PromptTemplate(template=template, input_variables=["entities", "prompt"])
+        conversation_chain = ConversationChain(prompt=prompt, llm=llm, memory=memory)
         # Run the chain and get the stream
         stream = llm_chain.run(question)
 
