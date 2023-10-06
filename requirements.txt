@@ -9,3 +9,4 @@ flask
 python-dotenv
 flask-restful
 flask_restx
+langchain
