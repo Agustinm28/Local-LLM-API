@@ -5,3 +5,8 @@ asyncio
 asgiref
 requests
 tqdm
+flask
+python-dotenv
+flask-restful
+flask_restx
+langchain
