@@ -10,3 +10,5 @@ python-dotenv
 flask-restful
 flask_restx
 langchain
+Flask-Cors
+flask-marshmallow

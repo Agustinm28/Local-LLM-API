@@ -27,6 +27,7 @@ def load_model():
     verbose = model_config['verbose']
     template = model_config['template']
     repeat_penalty = model_config['repeat_penalty']
+    f16_kv = model_config["f16_kv"]
 
     llm = LlamaCpp(
         model_path=model_path, 
@@ -37,6 +38,7 @@ def load_model():
         top_k=top_k,
         verbose=verbose,
         repeat_penalty=repeat_penalty,
+        f16_kv=f16_kv,
         echo=True
         )
     
