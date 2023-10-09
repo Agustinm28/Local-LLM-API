@@ -34,14 +34,20 @@ class Model(Resource):
         '''
         Method to set the model to be used for predictions.
             - Requires an API key in the request header.
+            - Requires a model name in the request body.
+            - Requires a model config name in the request body. You can set the model config name in the config.json file in data.
         '''
         start_time = time.time()
 
         request_data = request.get_json()
         model_name = request_data.get("model")
+        model_config_name = request_data.get("model_config")
 
         try:
-            model = set_model(model_name)
+            model = set_model(
+                model_config_name=model_config_name, 
+                model_name=model_name
+                )
         except Exception as e:
             error_message = str(e)
             return LLMmodels.abort(500, error_message)
@@ -78,6 +84,7 @@ class Downloads(Resource):
         '''
         Method to download a model locally.
             - Requires an API key in the request header.
+            - Requires a model name in the request body. Use the get method to see the models available for download.
         '''
         start_time = time.time()
 

@@ -31,7 +31,7 @@ class LinkExtractor:
     def filter_links(self, links):
         filtered_links = []
         for link in links:
-            if link.endswith('.bin') or link.endswith('.zip'):
+            if link.endswith('.gguf') or link.endswith('.zip'):
                 filtered_links.append(link)
         return filtered_links
 
@@ -59,17 +59,9 @@ class LinkExtractor:
 
 if __name__ == '__main__':
     model_extraction = {
-        'Llama-2-7B-GGML': 'https://huggingface.co/TheBloke/Llama-2-7B-GGML/tree/main',
-        'Llama-2-13B-GGML': 'https://huggingface.co/TheBloke/Llama-2-13B-GGML/tree/main',
-        'Llama-2-70B-GGML': 'https://huggingface.co/TheBloke/Llama-2-70B-GGML/tree/main',
-        'Llama-2-7B-Chat-GGML': 'https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGML/tree/main',
-        'Llama-2-13B-Chat-GGML': 'https://huggingface.co/TheBloke/Llama-2-13B-chat-GGML/tree/main',
-        'Llama-2-70B-Chat-GGML': 'https://huggingface.co/TheBloke/Llama-2-70B-Chat-GGML/tree/main',
-        'Yarn-Llama-2-7B-64K':'https://huggingface.co/TheBloke/Yarn-Llama-2-7B-64K-GGML/tree/main',
-        'Yarn-Llama-2-13B-128K':'https://huggingface.co/TheBloke/Yarn-Llama-2-7B-128K-GGML/tree/main',
-        'Vicuna-7B-GGML': 'https://huggingface.co/TheBloke/vicuna-7B-v1.3-GGML/tree/main',
-        'Vicuna-13B-GGML': 'https://huggingface.co/TheBloke/vicuna-13B-v1.5-GGML/tree/main',
-        'Vicuna-33B-GGML': 'https://huggingface.co/TheBloke/vicuna-33B-GGML/tree/main',
+        'Vicuna-7b': 'https://huggingface.co/TheBloke/vicuna-7B-v1.5-GGUF/tree/main',
+        'Llama-2-7b':'https://huggingface.co/TheBloke/Llama-2-7B-GGUF/tree/main',
+        'Llama-2-13b':'https://huggingface.co/TheBloke/Llama-2-13B-GGUF/tree/main'
     }
 
     output_path = 'data/models.json'

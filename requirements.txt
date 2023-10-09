@@ -1,6 +1,6 @@
 flask
 flask_sse
-llama-cpp-python==0.1.65
+llama-cpp-python
 asyncio
 asgiref
 requests
