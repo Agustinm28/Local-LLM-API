@@ -4,7 +4,7 @@ import requests
 from langchain.llms import LlamaCpp
 from tqdm import tqdm
 
-def load_model(model_name:str=None):
+def load_model():
     '''
     Method to load the model. Gets the model name from config.json.
     '''
@@ -14,6 +14,8 @@ def load_model(model_name:str=None):
     # Read model name from config.json
     with open('data/config.json', 'r') as f:
         config = json.load(f)
+
+    model_name = config['SelectedModel']
     model_config = config[model_name]
 
     model_path = f'./models/{model_config["model"]}'
@@ -59,7 +61,7 @@ def get_models():
 
     return models
 
-def set_model(model_name:str): #! CAMBIAR
+def set_model(model_config_name:str, model_name:str): #! CAMBIAR
     '''
     Method to set the model. Where:
         - model_name: name of the model. You can get the models with get_models()
@@ -74,7 +76,8 @@ def set_model(model_name:str): #! CAMBIAR
         # Write the model name in config.json
         with open('data/config.json', 'r') as f:
             config = json.load(f)
-        config['Vicuna-13b']['model'] = model_name
+        config['SelectedModel'] = model_name
+        config[model_config_name]['model'] = model_name
         with open('data/config.json', 'w') as f:
             json.dump(config, f, indent=4)
         
@@ -146,3 +149,4 @@ def download_model(model_name:str):
         return f"Model {model_name} downloaded"
     else:
         return f"Model {model_name} download failed"
+    
