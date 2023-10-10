@@ -2,20 +2,21 @@ from flask_restx import Namespace, Resource
 from flask import request
 from utils.load_model import load_model
 from langchain.prompts import PromptTemplate
-from langchain.chains import ConversationChain, LLMChain
-from langchain.memory import ConversationBufferMemory
-from langchain.memory import ConversationEntityMemory
+from langchain.chains import LLMChain
+from langchain.memory import ConversationBufferWindowMemory
 from langchain.memory.entity import SQLiteEntityStore
 import time
 import copy
 from auth.authentication import *
+from queue import Queue
+from threading import Thread
 
 answer = Namespace('answer', description='Answer related operations')
 
 memory = None
 llm = None
-template = None
-entity_store = SQLiteEntityStore()
+running_thread = None
+queue = Queue()
 
 @answer.route('/')
 class Answer(Resource):
@@ -31,13 +32,11 @@ class Answer(Resource):
         global llm
         global template
         global memory
-        global entity_store
 
         if not llm:
             try:
                 llm, template = load_model()
-                #memory = ConversationEntityMemory(llm=llm, entity_store=entity_store)
-                memory = ConversationBufferMemory(memory_key="chat_history")
+                memory = ConversationBufferWindowMemory(k=1, memory_key="chat_history")
             except Exception as e:
                 error_message = str(e)
                 return answer.abort(500, error_message)
@@ -50,8 +49,10 @@ class Answer(Resource):
 
         # Create prompt from template
         ## input_variables reads the variables from the template
-        prompt = PromptTemplate(template=template, input_variables=["chat_history", "input"])
-        conversation_chain = ConversationChain(llm=llm, memory=memory, verbose=True, prompt=prompt)
+        
+        prompt = PromptTemplate(template=template, input_variables=["history", "input"])
+        conversation_chain = LLMChain(prompt=prompt, llm=llm, memory=memory, verbose=True)
+
         # Run the chain and get the stream
         stream = conversation_chain.predict(input=question)
 

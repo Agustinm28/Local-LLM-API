@@ -29,6 +29,12 @@ if ! [ -x "$(command -v python3.10-venv)" ]; then
     echo "Installing venv..."
     sudo apt install python3.10-venv -y
 fi
+# Install sqlite3
+# Check if sqlite3 is installed
+if ! [ -x "$(command -v sqlite3)" ]; then
+    echo "Installing sqlite3..."
+    sudo apt install sqlite3 -y
+fi
 # Create venv
 # Check if venv is created
 if ! [ -d ".venv" ]; then
@@ -67,7 +73,7 @@ fi
 
 ## Install dependencies
 echo "Installing dependencies..."
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 
 ## Create models folder
 # Check if models folder exists
