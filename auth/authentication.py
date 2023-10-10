@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import request, jsonify
+from flask import request
 import json
 import secrets
 import string
@@ -18,7 +18,7 @@ def require_api_key(view_func):
         if api_key and api_key in api_keys.values():
             return view_func(*args, **kwargs)
         else:
-            return jsonify({"message": "Unauthorized"}), 401
+            return {"message": "Unauthorized"}, 401
     
     return decorated_view
 
@@ -37,7 +37,7 @@ def require_master_key(view_func):
         if master_key and master_key == api_keys.get('0'):
             return view_func(*args, **kwargs)
         else:
-            return jsonify({"message": "Unauthorized"}), 401
+            return {"message": "Unauthorized"}, 401
     
     return decorated_view
 

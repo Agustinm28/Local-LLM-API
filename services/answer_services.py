@@ -2,7 +2,8 @@ from flask_restx import Namespace, Resource
 from flask import request
 from utils.load_model import load_model
 from langchain.prompts import PromptTemplate
-from langchain.chains import ConversationChain
+from langchain.chains import ConversationChain, LLMChain
+from langchain.memory import ConversationBufferMemory
 from langchain.memory import ConversationEntityMemory
 from langchain.memory.entity import SQLiteEntityStore
 import time
@@ -14,6 +15,7 @@ answer = Namespace('answer', description='Answer related operations')
 memory = None
 llm = None
 template = None
+entity_store = SQLiteEntityStore()
 
 @answer.route('/')
 class Answer(Resource):
@@ -29,12 +31,13 @@ class Answer(Resource):
         global llm
         global template
         global memory
-        entity_store = SQLiteEntityStore()
+        global entity_store
 
         if not llm:
             try:
                 llm, template = load_model()
-                memory = ConversationEntityMemory(llm=llm, entity_store=entity_store)
+                #memory = ConversationEntityMemory(llm=llm, entity_store=entity_store)
+                memory = ConversationBufferMemory(memory_key="chat_history")
             except Exception as e:
                 error_message = str(e)
                 return answer.abort(500, error_message)
@@ -47,10 +50,10 @@ class Answer(Resource):
 
         # Create prompt from template
         ## input_variables reads the variables from the template
-        prompt = PromptTemplate(template=template, input_variables=["entities", "history", "input"])
-        conversation_chain = ConversationChain(prompt=prompt, llm=llm, memory=memory)
+        prompt = PromptTemplate(template=template, input_variables=["chat_history", "input"])
+        conversation_chain = ConversationChain(llm=llm, memory=memory, verbose=True, prompt=prompt)
         # Run the chain and get the stream
-        stream = conversation_chain.run(question)
+        stream = conversation_chain.predict(input=question)
 
         result = copy.deepcopy(stream)
 
