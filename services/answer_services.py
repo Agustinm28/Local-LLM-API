@@ -10,6 +10,7 @@ import copy
 from auth.authentication import *
 from queue import Queue
 from threading import Thread
+from re import search
 
 answer = Namespace('answer', description='Answer related operations')
 
@@ -40,6 +41,14 @@ class Answer(Resource):
             except Exception as e:
                 error_message = str(e)
                 return answer.abort(500, error_message)
+                
+        # Algo que estaba probando, no le den bola
+        '''memDict = memory.load_memory_variables(inputs=None)
+        if memDict['chat_history']:
+            memory.clear()
+            matchAI = search(r"AI: (.*)", memDict['chat_history'])
+            onlyAIstr = matchAI.group(1)
+            memory'''
 
         request_data = request.get_json()
         question = request_data.get("prompt")
@@ -50,7 +59,7 @@ class Answer(Resource):
         # Create prompt from template
         ## input_variables reads the variables from the template
         
-        prompt = PromptTemplate(template=template, input_variables=["history", "input"])
+        prompt = PromptTemplate(template=template, input_variables=["chat_history", "input"])
         conversation_chain = LLMChain(prompt=prompt, llm=llm, memory=memory, verbose=True)
 
         # Run the chain and get the stream
