@@ -12,7 +12,7 @@ import json
 class LLMRequests:
 
     def __init__(self, api_key: str = None):
-        self.url = "http://10.201.2.161:5000/"
+        self.url = "http://127.0.0.1:5000/"
         self.api_key = api_key
 
 
