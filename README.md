@@ -106,17 +106,17 @@ mkdir models
 
     Where:
 
-        - **SelectedModel** is the profile in use
-        - **Vicuna-13b** is the name of the profile
-            - **model** is the name of the model .gguf file in models folder
-            - **n_ctx** determines the maximum context length for the model.
-            - **temperature** controls the randomness of the model's output. Higher values make the output more random, while lower values make it more deterministic.
-            - **max_tokens** sets a limit on the number of tokens in the model's response.
-            - **top_p** is used for nucleus sampling, where the model only considers the most likely tokens that make up a certain portion of the cumulative probability distribution.
-            - **top_k** limits the number of the most likely tokens to consider during response generation. Higher values result in more diversity, but excessive values may lead to incoherent output.
-            - **verbose**: indicates that the model will provide detailed or additional information alongside the responses.
-            - **repeat_penalty** discourages the model from repeating the same tokens in the response.
-            - **template** It's where the system prompt (LLM's mission and features) and variables are located. You can modify this parameter in order to achieve a specific goal for your LLM.
+    - **SelectedModel** is the profile in use
+    - **Vicuna-13b** is the name of the profile
+        - **model** is the name of the model .gguf file in models folder
+        - **n_ctx** determines the maximum context length for the model.
+        - **temperature** controls the randomness of the model's output. Higher values make the output more random, while lower values make it more deterministic.
+        - **max_tokens** sets a limit on the number of tokens in the model's response.
+        - **top_p** is used for nucleus sampling, where the model only considers the most likely tokens that make up a certain portion of the cumulative probability distribution.
+        - **top_k** limits the number of the most likely tokens to consider during response generation. Higher values result in more diversity, but excessive values may lead to incoherent output.
+        - **verbose**: indicates that the model will provide detailed or additional information alongside the responses.
+        - **repeat_penalty** discourages the model from repeating the same tokens in the response.
+        - **template** It's where the system prompt (LLM's mission and features) and variables are located. You can modify this parameter in order to achieve a specific goal for your LLM.
 
     **NOTE**: Learn more of quantized LLMs here [What are Quantized LLMs?](https://www.tensorops.ai/post/what-are-quantized-llms#:~:text=Updated%3A%20Oct%201,the%20precision%20of%20their%20weights.)
 
@@ -158,20 +158,20 @@ python3 main.py
 
 Sessions are used to store the history of interactions in a conversation locally for later resumption. Some considerations include:
 
-    - Sessions will store the number of interactions specified in the `k` parameter of the `ConversationBufferWindowMemory` in the `memory` variable in `services/answer_services.py` in the post function for the `Answer` class. This parameter will cause the last k interactions to be stored in memory.
+- Sessions will store the number of interactions specified in the `k` parameter of the `ConversationBufferWindowMemory` in the `memory` variable in `services/answer_services.py` in the post function for the `Answer` class. This parameter will cause the last k interactions to be stored in memory.
 
-    ```python
-    session = load_session(session_id=session_id)
-    memory = ConversationBufferWindowMemory(
-            k=5, # Number of interactions to store in memory
-            memory_key="chat_history", 
-            chat_memory=session
-            )
-    ```
+```python
+session = load_session(session_id=session_id)
+memory = ConversationBufferWindowMemory(
+        k=5, # Number of interactions to store in memory
+        memory_key="chat_history", 
+        chat_memory=session
+        )
+```
 
-    - If no session is specified in the body of the request, the session will be taken as `None`, and will not be saved locally, so the session will only live the k interactions specified above in memory.
+- If no session is specified in the body of the request, the session will be taken as `None`, and will not be saved locally, so the session will only live the k interactions specified above in memory.
 
-    - The session_id can take any numerical value, if it does not exist in `data/sessions.json` on the server side a new session will be generated, if it does exist, it will continue and update that existing session.
+- The session_id can take any numerical value, if it does not exist in `data/sessions.json` on the server side a new session will be generated, if it does exist, it will continue and update that existing session.
 
 ## 🌐 Requests
 
@@ -218,8 +218,8 @@ Sessions are used to store the history of interactions in a conversation locally
 - Generate a new api key for the LLM Local API Server. Requires master key.
 - Request header: {"Authorization": master_api_key}
 
-## 🖊️ Author
+## 🖊️ Authors
 
-Agustín Montaña - [GitHub](https://github.com/Agustinm28)
-Bruno Orbelli - [GitHub](https://github.com/Bruno-Orbelli)
-Francisco Espinola - [GitHub](https://github.com/franespinola)
+- Agustín Montaña - [GitHub](https://github.com/Agustinm28)
+- Bruno Orbelli - [GitHub](https://github.com/Bruno-Orbelli)
+- Francisco Espinola - [GitHub](https://github.com/franespinola)
