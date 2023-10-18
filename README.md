@@ -105,6 +105,7 @@ mkdir models
     ```
 
     Where:
+
         - **SelectedModel** is the profile in use
         - **Vicuna-13b** is the name of the profile
             - **model** is the name of the model .gguf file in models folder
@@ -136,7 +137,7 @@ mkdir models
         "template": "You are a chatbot. \n\n{chat_history} \n\nPROMPT: {input} \n\nBOT:"
         },
     "Other-profile": {
-        Your configuration here ...
+        "Your configuration here ..."
         }
     }
     ```
