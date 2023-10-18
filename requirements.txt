@@ -5,6 +5,7 @@ asyncio
 asgiref
 requests
 tqdm
+colorama
 python-dotenv
 flask-restful
 flask_restx

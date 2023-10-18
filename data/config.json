@@ -1,24 +1,25 @@
-{   "SelectedModel":"Vicuna-33b",
-    "Vicuna-13b":{
-        "model":"vicuna-13b-v1.5.Q5_K_M.gguf",
-        "n_ctx":4096,
-        "temperature":0.7,
-        "max_tokens":16000,
-        "top_p":0.8,
-        "top_k":40,
-        "verbose":true,
-        "repeat_penalty":1.1,
-        "template":"Eres un guionista y redactor de dialogos profesional. {chat_history} PROMPT: {input} GUIONISTA:"
-        },
-    "Vicuna-33b":{
-        "model":"vicuna-33b.Q5_K_M.gguf",
-        "n_ctx":4096,
-        "temperature":0.7,
-        "max_tokens":16000,
-        "top_p":0.8,
-        "top_k":40,
-        "verbose":true,
-        "repeat_penalty":1.1,
-        "template":"Eres un guionista y redactor de dialogos profesional. {chat_history} PROMPT: {input} GUIONISTA:"
-        }
+{
+    "SelectedModel": "Vicuna-13b",
+    "Vicuna-13b": {
+        "model": "vicuna-13b-v1.5.Q5_K_M.gguf",
+        "n_ctx": 4096,
+        "temperature": 0.7,
+        "max_tokens": 16000,
+        "top_p": 0.8,
+        "top_k": 40,
+        "verbose": true,
+        "repeat_penalty": 1.1,
+        "template": "Eres un guionista y redactor de dialogos profesional. \n\n{chat_history} \n\nPROMPT: {input} \n\nGUIONISTA:"
+    },
+    "Vicuna-33b": {
+        "model": "vicuna-33b.Q5_K_M.gguf",
+        "n_ctx": 4096,
+        "temperature": 0.7,
+        "max_tokens": 16000,
+        "top_p": 0.8,
+        "top_k": 40,
+        "verbose": true,
+        "repeat_penalty": 1.1,
+        "template": "Eres un guionista y redactor de dialogos profesional. \n\n{chat_history} \n\nPROMPT: {input} \n\nGUIONISTA:"
     }
+}

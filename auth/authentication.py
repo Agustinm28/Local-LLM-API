@@ -3,6 +3,7 @@ from flask import request
 import json
 import secrets
 import string
+from colorama import Fore as c
 
 def require_api_key(view_func):
     '''
@@ -59,7 +60,7 @@ def generate_api_key():
         api_key_number = list(api_keys.keys())[-1]
         api_key_number = int(api_key_number) + 1
         api_key_number = str(api_key_number)
-        print(api_key_number)
+        print(f'\n[ {c.BLUE}KEY{c.RESET} ] {api_key_number}\n')
 
     api_keys[api_key_number] = api_key
 
