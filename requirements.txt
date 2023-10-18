@@ -1,6 +1,14 @@
 flask
 flask_sse
-llama-cpp-python==0.1.65
+llama-cpp-python
 asyncio
 asgiref
 requests
+tqdm
+colorama
+python-dotenv
+flask-restful
+flask_restx
+langchain
+Flask-Cors
+flask-marshmallow
