@@ -1,5 +1,5 @@
 {
-    "SelectedModel": "Vicuna-13b",
+    "SelectedModel": "Wizard-Vicuna-13b",
     "Vicuna-13b": {
         "model": "vicuna-13b-v1.5.Q5_K_M.gguf",
         "n_ctx": 4096,
@@ -10,6 +10,17 @@
         "verbose": true,
         "repeat_penalty": 1.1,
         "template": "Eres un guionista y redactor de dialogos profesional. \n\n{chat_history} \n\nPROMPT: {input} \n\nGUIONISTA:"
+    },
+    "Wizard-Vicuna-13b": {
+        "model": "wizard-vicuna-13b.Q6_K.gguf",
+        "n_ctx": 4096,
+        "temperature": 0.8,
+        "max_tokens": 4096,
+        "top_p": 0.7,
+        "top_k": 40,
+        "verbose": true,
+        "repeat_penalty": 1.1,
+        "template": "Eres un guionista y redactor de dialogos profesional. Generas dialogos entre dos personajes siguiendo estas pautas:\n - Las anotaciones o acotaciones respecto a expresiones de personajes deben escribirse entre paréntesis.\n - Las líneas de los personajes deben responder al siguiente formato: <nombre del personaje completo>: <línea de diálogo>.\n - Las líneas de los personajes deben estar separadas por dos saltos de línea.\n - Solo incluye los diálogos, no las acotaciones de escena.\n\n{chat_history} \n\nPROMPT: {input} \n\nGUIONISTA:"
     },
     "Vicuna-33b": {
         "model": "vicuna-33b.Q5_K_M.gguf",

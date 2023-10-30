@@ -1,20 +1,12 @@
 import requests
 from dotenv import load_dotenv
 import os
-from tqdm import tqdm
-import json
-
-### ACLARATIONS ###
-# - In order to use this module you need to be in the UM Cloud zerotier network.
-# - The module make requests to the LLM Local API Server in the UM Cloud.
-
 
 class LLMRequests:
 
-    def __init__(self, api_key: str = None):
-        self.url = "http://127.0.0.1:5000/"
+    def __init__(self, url: str, api_key: str = None):
+        self.url = 'http://127.0.0.1:5000'
         self.api_key = api_key
-
 
 class AnswerRequest(LLMRequests):
     '''
@@ -28,7 +20,7 @@ class AnswerRequest(LLMRequests):
         '''
 
         data = {"prompt": f"{prompt}", "session_id": session_id}
-        headers = {"Authorization": self.api_key}
+        headers = {"Authorization": self.api_key, "charset": "UTF-8", "pageEncoding": "UTF-8"}
         url = self.url + endpoint
 
         response = requests.post(url, json=data, headers=headers)
@@ -68,7 +60,7 @@ class AnswerRequest(LLMRequests):
 
     def get_sessions(self, endpoint="/answer"):
         '''
-        Method to get an answer from the LLM Local API Server. Where:
+        Method to get the sessions from the LLM Local API Server. Where:
             - prompt: is the question to be answered.
         '''
 
@@ -116,6 +108,7 @@ class ModelRequest(LLMRequests):
         '''
         Method to set the model to be used in the LLM Local API Server. Where:
             - model: is the name of the model to be used.
+            - model_config: is the name of the model profile to be used.
         '''
 
         data = {"model": f"{model}", "model_config": f"{model_config}"}
@@ -194,8 +187,15 @@ if __name__ == '__main__':
 
     # Get answer from the model throug API
     # prompt = "Genera un diálogo corto de 6 intercambios entre 2 personajes (Cosmo, Coscu (Streamer, Latin American Spanish)), con temática relacionada a las siguientes palabras clave: Economía, Anime. El sentimiento principal del diálogo es Tristeza. El sentimiento secundario del diálogo es Desengaño. El diálogo se desarrolla en La luna. En cuanto al tiempo, el diálogo tiene lugar al/ a la Noche. El clima del diálogo es Lluvia de meteoritos. El diálogo debe estar escrita al estilo de Stephen King. El diálogo debe ser del género Terror. El argumento principal del diálogo es el siguiente: Cosmo se encuentra con el fantasma de Coscu. El objetivo del diálogo (lo que se pretende lograr con el mismo dentro de la historia) es Asustar al lector."
-    # prompt = 'Podes resumir lo que hablamos?'
-    # answer = ans.get_answer(prompt=prompt, session_id=2)
+    # prompt = 'Podes continuar el dialogo anterior? Pero esta vez, Cosmo le cuenta a Goku (Saiyan de Dragon Ball Z) lo sucedido con Coscu.'
+    # prompt = 'Resumime el dialogo anterior.'
+    prompt = "Genera el boceto de un episodio de una serie 5 escenas, donde los siguientes personajes intervengan en el orden que consideres más conveniente (Cosmo, Coscu, Goku). La temática del episodio debe ser 'El valor de la amistad'. Tienes absoluta libertad respecto a los lugares, la ambientación y el entramado de la historia, siempre y cuando las escenas sean coherentes y cohesivas entre sí. Cada escena debe estar limitada al siguiente formato: ESCENA <número de escena>: <doble salto de línea> - TÓPICOS: <lista de tópicos principales de la escena, separados por coma; cada tópico debe ser una sola palabra> <doble salto de línea> - GÉNERO: <género principal de la escena: terror, comedia, etc...> <doble salto de línea> - ARGUMENTO: <frase breve describiendo el argumento principal de la escena> <doble salto de línea> - OBJETIVO: <frase breve describiendo lo que escena pretende lograr argumentalmente hablando, lo que busca evocar en el televidente> <doble salto de línea>."
+    answer = ans.get_answer(prompt=prompt, session_id=1)
+    print(answer)
+
+    ## Get answer from the model through API
+    # prompt = "Genera un diálogo corto de 6 intercambios entre 2 personajes (Cosmo, Wanda), que continúe con los diálogos anteriores (presentes en 'CURRENT CONVERSATION'), con temática relacionada a las siguientes palabras clave: Amor, Anime. El sentimiento principal del diálogo es Esperanza. El sentimiento secundario del diálogo es Angustia. El diálogo se desarrolla en La luna. En cuanto al tiempo, el diálogo tiene lugar al/ a la Noche. El clima del diálogo es Lluvia de meteoritos. El diálogo debe estar escrito al estilo de Stephen King. El diálogo debe ser del género Terror. El argumento principal del diálogo es el siguiente: Cosmo le cuenta a Wanda lo sucedido con Coscu. El objetivo del diálogo (lo que se pretende lograr con el mismo dentro de la historia) es Avanzar la trama principal. Debes cumplir con las siguientes pautas:\n - Las anotaciones o acotaciones respecto a expresiones, entradas o salidas de personajes deben escribirse entre paréntesis.\n - Las líneas de los personajes deben responder al siguiente formato: <nombre del personaje>: (<acotaciones, si las hubiese>) <línea de diálogo>.\n - Las líneas de los personajes deben estar separadas por dos saltos de línea."
+    # answer = ans.get_answer(prompt=prompt)
     # print(answer)
 
     # Get raw answer from the model throug API (dict format with extra info)
@@ -204,9 +204,9 @@ if __name__ == '__main__':
     # print(answer)
 
     # Get sessions
-    sessions = ans.get_sessions()
-    sessions = json.dumps(sessions, indent=4)
-    print(sessions)
+    # sessions = ans.get_sessions()
+    # sessions = json.dumps(sessions, indent=4)
+    # print(sessions)
 
     # Get available models
     # available_models = mo.get_models()
